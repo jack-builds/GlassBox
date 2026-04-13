@@ -33,6 +33,14 @@ GlassBox is a modern VM manager built with **Tauri + React**, focused on making 
 
 ---
 
+## ⚠️ Platform Support
+
+Currently tested on Linux only.
+
+Cross-platform support (macOS + Windows) is planned.
+
+---
+
 ## 📦 Getting Started
 
 ### 1. Clone the repo
