@@ -32,7 +32,7 @@ export default function Sidebar({ Icon }: { Icon: any }) {
       cursor: "pointer",
       background: active ? "rgba(79,156,249,0.15)" : "transparent",
       color: active ? "#4f9cf9" : "#7a7f94",
-      transition: "all 0.15s ease",
+      transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
       boxShadow: active
         ? "0 4px 12px rgba(79,156,249,0.4)"
         : "none"

@@ -28,7 +28,7 @@ export default function VMCard({
       borderRadius: "14px",
       overflow: "hidden",
       cursor: "pointer",
-      transition: "all .2s ease",
+      transition: "all .2s cubic-bezier(0.4, 0, 0.2, 1)",
       boxShadow: selected
         ? "0 0 0 1px #4f9cf9, 0 10px 30px rgba(0,0,0,0.4)"
         : "0 6px 20px rgba(0,0,0,0.25)",
