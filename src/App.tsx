@@ -49,12 +49,12 @@ const S = {
   vmOs: { fontSize: "10px", color: "#7a7f94", marginBottom: "8px" },
   actions: { display: "flex", gap: "4px", padding: "4px 10px 10px", alignItems: "center" },
   iconBtn: (color?: string) => ({ width: "28px", height: "28px", background: "#1a1e2a", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: color || "#7a7f94", flexShrink: 0 }),
-  detail: { background: "#13161e", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "16px", width: "240px", flexShrink: 0 },
+  detail: { background: "linear-gradient(145deg, #13161e, #0f1218)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "14px", padding: "16px", width: "260px", boxShadow: "0 10px 30px rgba(0,0,0,0.35)" },
   sectionLabel: { fontSize: "10px", color: "#7a7f94", textTransform: "uppercase" as const, letterSpacing: ".08em", marginBottom: "10px" },
   barWrap: { marginBottom: "10px" },
   barLabel: { display: "flex", justifyContent: "space-between", fontSize: "11px", marginBottom: "4px" },
   barVal: { color: "#7a7f94", fontFamily: "monospace", fontSize: "10px" },
-  bar: { height: "4px", background: "#1a1e2a", borderRadius: "2px", overflow: "hidden" },
+  bar: { height: "6px", background: "#1a1e2a", borderRadius: "4px", overflow: "hidden" },
 };
 
 export default function App() {
@@ -115,6 +115,17 @@ export default function App() {
 
   return (
     <div style={S.app}>
+
+      <style>
+        {`
+        @keyframes fadeIn {
+          to { 
+          opacity: 1; 
+          transform: translateY(0); 
+          }
+        }
+        `}
+      </style>
       <Sidebar Icon={Icon} />
       <div style={S.main}>
         <Topbar
@@ -126,20 +137,37 @@ export default function App() {
 
         <div style={{ display: "flex", gap: "12px" }}>
           <div style={{ ...S.grid, flex: 1 }}>
-           {filtered.map(vm => (
-            <VMCard
+           {filtered.map((vm, i) => (
+            <div
               key={vm.name}
-              vm={vm}
-              selected={selected === vm.name}
-              onSelect={() => setSelected(vm.name)}
-              onToggle={() => toggleVM(vm)}
-            />
-          ))}
+              style={{
+                opacity: 0,
+                transform: "translateY(10px)",
+                animation: `fadeIn 0.4s ease forwards`,
+                animationDelay: `${i * 0.05}s`,
+              }}
+            >
+              <VMCard
+                vm={vm}
+                selected={selected === vm.name}
+                onSelect={() => setSelected(vm.name)}
+                onToggle={() => toggleVM(vm)}
+              />
+            </div>
+           ))}
           </div>
 
           {sel && (
             <div style={S.detail}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
+              <div style={{ 
+                display: "flex", 
+                alignItems: "center", 
+                gap: "8px", 
+                marginBottom: "14px", 
+                paddingBottom: "10px",
+                borderBottom: "1px solid rgba(255,255,255,0.06)"
+                }}
+                >
                 <div style={S.dot(sel.status)}></div>
                 <span style={{ fontSize: "13px", fontWeight: 600 }}>{sel.name}</span>
                 <span style={{ ...S.badge(sel.status), marginLeft: "auto" }}>{sel.status}</span>
@@ -156,16 +184,54 @@ export default function App() {
                     <span style={S.barVal}>{r.val}%</span>
                   </div>
                   <div style={S.bar}>
-                    <div style={{ height: "100%", width: `${r.val}%`, background: r.color, borderRadius: "2px", transition: "width .6s ease" }}></div>
+                    <div style={{ 
+                      height: "100%", 
+                      width: `${r.val}%`, 
+                      background: r.color, 
+                      borderRadius: "4px", 
+                      boxShadow: `0 0 8px ${r.color}`,
+                      }}
+                      ></div>
                   </div>
                 </div>
               ))}
               <div style={{ ...S.sectionLabel, marginTop: "14px" }}>Actions</div>
-              <button style={{ ...S.btn(true), width: "100%", justifyContent: "center", marginBottom: "6px" }}
-                onClick={() => toggleVM(sel)}>
+              <button 
+                style={{ ...S.btn(true), width: "100%", justifyContent: "center", marginBottom: "6px" }}
+                onClick={() => toggleVM(sel)}
+
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 6px 18px rgba(79,156,249,0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                >
                 {sel.status === "running" ? <>{Icon.stop} Stop VM</> : <>{Icon.play} Start VM</>}
               </button>
-              <button style={{ ...S.btn(), width: "100%", justifyContent: "center" }}>
+              <button 
+                style={{ ...S.btn(), width: "100%", justifyContent: "center" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#222636";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "#1a1e2a";
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = "scale(0.97)";
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+                >
                 {Icon.snapshot} Snapshot
               </button>
             </div>
